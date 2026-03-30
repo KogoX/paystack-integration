@@ -65,9 +65,9 @@ function Donate() {
     button:
       "w-full py-3 mt-2 bg-black text-white rounded-lg font-medium hover:bg-gray-900 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed",
     container:
-      "min-h-screen flex items-center justify-center bg-gray-50 px-4",
+      "min-h-screen flex items-center justify-center bg-black/50 px-4",
     card:
-      "w-full max-w-md bg-white p-8 rounded-2xl shadow-sm border border-gray-200",
+      "w-full max-w-md bg-white p-8 rounded-2xl shadow-lg border border-gray-200",
     title:
       "text-2xl font-semibold text-center text-black mb-6",
     label:
