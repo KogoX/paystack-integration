@@ -7,7 +7,34 @@ function Donate() {
   const [name, setName] = useState('')
   const [amount, setAmount] = useState('')
   const [phoneNumber, setPhoneNumber] = useState('')
+  const [phoneError, setPhoneError] = useState('')
   const [loading, setLoading] = useState(false)
+
+  const handlePhoneChange = (e) => {
+    let value = e.target.value.replace(/\D/g, '')
+    
+    if (value && !value.startsWith('07')) {
+      if (value.startsWith('7')) {
+        value = '0' + value
+      } else if (value.startsWith('254')) {
+        value = '0' + value.substring(3)
+      }
+    }
+
+    if (value.length > 10) {
+      value = value.substring(0, 10)
+    }
+
+    setPhoneNumber(value)
+
+    if (value && value.length < 10) {
+      setPhoneError('Phone number must be 10 digits')
+    } else if (value && !value.startsWith('07')) {
+      setPhoneError('Phone number must start with 07')
+    } else {
+      setPhoneError('')
+    }
+  }
 
   const handlePayment = () => {
     // Validation
@@ -65,13 +92,15 @@ function Donate() {
     button:
       "w-full py-3 mt-2 bg-black text-white rounded-lg font-medium hover:bg-gray-900 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed",
     container:
-      "min-h-screen flex items-center justify-center bg-black/50 px-4",
+      "min-h-screen flex items-center justify-center bg-black/50 px-4 container-animate",
     card:
-      "w-full max-w-md bg-white p-8 rounded-2xl shadow-lg border border-gray-200",
+      "w-full max-w-md bg-white p-8 rounded-2xl shadow-lg border border-gray-200 card-animate",
     title:
       "text-2xl font-semibold text-center text-black mb-6",
     label:
-      "block text-sm text-gray-600 mb-1"
+      "block text-sm text-gray-600 mb-1",
+    errorText:
+      "text-red-500 text-xs mt-1 mb-2"
   }
 
   return (
@@ -121,10 +150,12 @@ function Donate() {
           <input
             type="text"
             value={phoneNumber}
-            className={style.input}
-            placeholder="+254..."
-            onChange={(e) => setPhoneNumber(e.target.value)}
+            className={`${style.input} ${phoneError ? 'border-red-500 focus:ring-red-500' : ''}`}
+            placeholder="07XXXXXXXX"
+            onChange={handlePhoneChange}
+            maxLength="10"
           />
+          {phoneError && <p className={style.errorText}>{phoneError}</p>}
 
           {/* Button */}
           <button
@@ -133,8 +164,7 @@ function Donate() {
               loading ||
               !email ||
               !name ||
-              !phoneNumber ||
-              !amount ||
+              !phoneNumber ||              phoneError ||              !amount ||
               Number(amount) <= 0
             }
             className={style.button}
