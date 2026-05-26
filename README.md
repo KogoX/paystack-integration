@@ -11,7 +11,7 @@
 
 - **Seamless Payment Flow**: Integrates the Paystack inline popup for a smooth checkout experience without redirecting users.
 - **Responsive Minimalist UI**: Crafted with React and Tailwind CSS v4 to look perfect on both mobile and desktop screens.
-- **Custom Metadata Tracking**: Dynamically captures and sends payer details (Name, Email, Phone Number) alongside the transaction.
+- **Custom Metadata Tracking**: Dynamically captures and sends payer details (Cardholder Name) alongside the transaction.
 - **Currency Support**: Fully configured for Kenyan Shilling (KES) transactions by default.
 - **Robust Validation**: Ensures data integrity with comprehensive form input validation before initializing payments.
 

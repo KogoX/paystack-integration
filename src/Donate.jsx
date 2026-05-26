@@ -6,39 +6,11 @@ function Donate() {
   const [email, setEmail] = useState('')
   const [name, setName] = useState('')
   const [amount, setAmount] = useState('')
-  const [phoneNumber, setPhoneNumber] = useState('')
-  const [phoneError, setPhoneError] = useState('')
   const [loading, setLoading] = useState(false)
-
-  const handlePhoneChange = (e) => {
-    let value = e.target.value.replace(/\D/g, '')
-    
-    if (value && !value.startsWith('07')) {
-      if (value.startsWith('7')) {
-        value = '0' + value
-      } else if (value.startsWith('254')) {
-        value = '0' + value.substring(3)
-      }
-    }
-
-    if (value.length > 10) {
-      value = value.substring(0, 10)
-    }
-
-    setPhoneNumber(value)
-
-    if (value && value.length < 10) {
-      setPhoneError('Phone number must be 10 digits')
-    } else if (value && !value.startsWith('07')) {
-      setPhoneError('Phone number must start with 07')
-    } else {
-      setPhoneError('')
-    }
-  }
 
   const handlePayment = () => {
     // Validation
-    if (!email || !name || !phoneNumber || !amount || Number(amount) <= 0) {
+    if (!email || !name || !amount || Number(amount) <= 0) {
       alert("Please fill all fields correctly")
       return
     }
@@ -54,14 +26,9 @@ function Donate() {
       metadata: {
         custom_fields: [
           {
-            display_name: "Full Name",
-            variable_name: "name",
+            display_name: "Cardholder Name",
+            variable_name: "cardholder_name",
             value: name,
-          },
-          {
-            display_name: "Phone Number",
-            variable_name: "phone",
-            value: phoneNumber,
           },
         ],
       },
@@ -74,7 +41,6 @@ function Donate() {
         setEmail('')
         setName('')
         setAmount('')
-        setPhoneNumber('')
       },
 
       onClose: function () {
@@ -98,9 +64,7 @@ function Donate() {
     title:
       "text-2xl font-semibold text-center text-black mb-6",
     label:
-      "block text-sm text-gray-600 mb-1",
-    errorText:
-      "text-red-500 text-xs mt-1 mb-2"
+      "block text-sm text-gray-600 mb-1"
   }
 
   return (
@@ -110,7 +74,7 @@ function Donate() {
 
         <div>
           {/* Name */}
-          <label className={style.label}>Full Name</label>
+          <label className={style.label}>Cardholder Name</label>
           <input
             type="text"
             value={name}
@@ -145,18 +109,6 @@ function Donate() {
             }}
           />
 
-          {/* Phone */}
-          <label className={style.label}>Phone Number</label>
-          <input
-            type="text"
-            value={phoneNumber}
-            className={`${style.input} ${phoneError ? 'border-red-500 focus:ring-red-500' : ''}`}
-            placeholder="07XXXXXXXX"
-            onChange={handlePhoneChange}
-            maxLength="10"
-          />
-          {phoneError && <p className={style.errorText}>{phoneError}</p>}
-
           {/* Button */}
           <button
             onClick={handlePayment}
@@ -164,7 +116,7 @@ function Donate() {
               loading ||
               !email ||
               !name ||
-              !phoneNumber ||              phoneError ||              !amount ||
+              !amount ||
               Number(amount) <= 0
             }
             className={style.button}
