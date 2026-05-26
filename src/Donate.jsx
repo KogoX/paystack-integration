@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 
 function Donate() {
-  const publicKey = "pk_live_5fe438b690a481610a2fd17e0bf78269c0c80c65"
+  const paystackPublicKey = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY
+  const [provider, setProvider] = useState('paystack')
 
   const [email, setEmail] = useState('')
   const [name, setName] = useState('')
@@ -15,10 +16,20 @@ function Donate() {
       return
     }
 
+    if (provider === 'pesapal') {
+      alert("Pesapal requires a backend to sign requests and process live payments.")
+      return
+    }
+
+    if (!paystackPublicKey) {
+      alert("Paystack public key is missing. Set VITE_PAYSTACK_PUBLIC_KEY in .env.local.")
+      return
+    }
+
     setLoading(true)
 
     const handler = window.PaystackPop.setup({
-      key: publicKey,
+      key: paystackPublicKey,
       email: email,
       amount: Number(amount) * 100, // convert to kobo
       currency: "KES",
@@ -64,7 +75,9 @@ function Donate() {
     title:
       "text-2xl font-semibold text-center text-black mb-6",
     label:
-      "block text-sm text-gray-600 mb-1"
+      "block text-sm text-gray-600 mb-1",
+    select:
+      "w-full px-4 py-3 mb-4 rounded-lg border border-gray-300 bg-white text-black focus:outline-none focus:ring-2 focus:ring-black focus:border-black transition"
   }
 
   return (
@@ -73,6 +86,17 @@ function Donate() {
         <h1 className={style.title}>Make a Payment</h1>
 
         <div>
+          {/* Provider */}
+          <label className={style.label}>Payment Provider</label>
+          <select
+            className={style.select}
+            value={provider}
+            onChange={(e) => setProvider(e.target.value)}
+          >
+            <option value="paystack">Paystack</option>
+            <option value="pesapal">Pesapal</option>
+          </select>
+
           {/* Name */}
           <label className={style.label}>Cardholder Name</label>
           <input
@@ -121,7 +145,11 @@ function Donate() {
             }
             className={style.button}
           >
-            {loading ? "Processing..." : "Donate"}
+            {loading
+              ? "Processing..."
+              : provider === 'paystack'
+                ? "Donate with Paystack"
+                : "Donate with Pesapal"}
           </button>
         </div>
       </div>

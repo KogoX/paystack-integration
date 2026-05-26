@@ -45,10 +45,13 @@ Follow these steps to get the application running locally.
    ```
 
 3. **Configure API Keys**
-   Open `src/Donate.jsx` and replace the `publicKey` variable with your actual Paystack test or live public key.
-   ```javascript
-   const publicKey = "pk_test_your_public_key_here"; // Use test key for development
+   Create a `.env.local` file in the project root and set your keys:
+   ```bash
+   VITE_PAYSTACK_PUBLIC_KEY=pk_live_your_public_key_here
+   VITE_PESAPAL_CONSUMER_KEY=your_pesapal_consumer_key
+   VITE_PESAPAL_CONSUMER_SECRET=your_pesapal_consumer_secret
    ```
+   > Note: Pesapal live payments require a backend to sign requests and obtain tokens. The current app shows the provider selector but processes payments with Paystack only.
 
 4. **Run the development server**
    ```bash
